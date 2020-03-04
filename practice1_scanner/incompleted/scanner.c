@@ -33,7 +33,17 @@ void skipBlank() {
 
 void skipComment() {
   // TODO
-  
+  while ((currentChar != EOF)){
+    if (charCodes[currentChar] == CHAR_TIMES){
+      currentChar = readChar();
+      if (charCodes[currentChar] == CHAR_RPAR){
+        readChar();
+        return 1;
+      }       
+    }
+  }
+      
+      
 }
 
 Token* readIdentKeyword(void) {
@@ -97,6 +107,12 @@ Token* getToken(void) {
     token = makeToken(SB_SEMICOLON, lineNo, colNo);
     readChar(); 
     return token;
+  case CHAR_LPAR:
+    currentChar = readChar();
+    if (charCodes[currentChar] == CHAR_TIMES)
+      skipComment();
+    // else  
+    //   return getToken();
   default:
     token = makeToken(TK_NONE, lineNo, colNo);
     error(ERR_INVALIDSYMBOL, lineNo, colNo);
